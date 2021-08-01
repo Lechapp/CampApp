@@ -44,7 +44,7 @@ class ParticipantController extends Controller
 
         $newParticipant = new Participant($data);
         $newParticipant->save();
-        return response()->json([], 201);
+        return response()->json(["id"=>$newParticipant->id], 201);
     }
 
 

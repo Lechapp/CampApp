@@ -42,8 +42,7 @@
                 <div></div>
             </div>
             <div class="mt-4">
-                <h4>
-                    {{ errorMessage }}
+                <h4 v-html="errorMessage">
                 </h4>
             </div>
         </div>
@@ -89,8 +88,12 @@ export default {
                     this.showLoader = false;
                     this.camps = JSON.parse(response.request.response); //if empty returns object {}
 
-                    if($.isEmptyObject(this.camps))
-                        this.errorMessage = "Dodaj swoją pierwszą ofertę obozową";
+                    if($.isEmptyObject(this.camps)){
+                        if(this.auth)
+                            this.errorMessage = "Dodaj swoją pierwszą ofertę obozową";
+                        else
+                            this.errorMessage = "Brak ofert obozowych<br/><a href='/create-camp'>Dodaj pierwszą!</a>";
+                    }
 
                 }).catch((error) => {
                 console.log(error);

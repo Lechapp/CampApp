@@ -82,10 +82,13 @@ export default {
             this.addErrorMessage = "";
             const config = {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}};
             this.axios.post('/participants', this.formData, config)
-                .then(() => {
+                .then((response) => {
+                    const data = JSON.parse(response.request.response);
+
                     this.participants.push({
                         name: this.formData.name,
-                        surname: this.formData.surname
+                        surname: this.formData.surname,
+                        id: data["id"]
                     });
                     this.$emit("vacancies", this.participants.length);
                     this.formData.name = "";

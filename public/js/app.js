@@ -2007,7 +2007,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CampList",
   data: function data() {
@@ -2051,7 +2050,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.showLoader = false;
         _this.camps = JSON.parse(response.request.response); //if empty returns object {}
 
-        if ($.isEmptyObject(_this.camps)) _this.errorMessage = "Dodaj swoją pierwszą ofertę obozową";
+        if ($.isEmptyObject(_this.camps)) {
+          if (_this.auth) _this.errorMessage = "Dodaj swoją pierwszą ofertę obozową";else _this.errorMessage = "Brak ofert obozowych<br/><a href='/create-camp'>Dodaj pierwszą!</a>";
+        }
       })["catch"](function (error) {
         console.log(error);
         _this.showLoader = false;
@@ -2293,10 +2294,13 @@ __webpack_require__.r(__webpack_exports__);
           Authorization: "Bearer ".concat(localStorage.getItem("token"))
         }
       };
-      this.axios.post('/participants', this.formData, config).then(function () {
+      this.axios.post('/participants', this.formData, config).then(function (response) {
+        var data = JSON.parse(response.request.response);
+
         _this.participants.push({
           name: _this.formData.name,
-          surname: _this.formData.surname
+          surname: _this.formData.surname,
+          id: data["id"]
         });
 
         _this.$emit("vacancies", _this.participants.length);
@@ -39014,11 +39018,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "mt-4" }, [
-        _c("h4", [
-          _vm._v(
-            "\n                " + _vm._s(_vm.errorMessage) + "\n            "
-          )
-        ])
+        _c("h4", { domProps: { innerHTML: _vm._s(_vm.errorMessage) } })
       ])
     ])
   ])
